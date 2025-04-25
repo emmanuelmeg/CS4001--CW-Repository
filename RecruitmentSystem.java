@@ -393,7 +393,7 @@ public class RecruitmentSystem implements ActionListener
             else
             { 
                 
-                // inform user that staff has already remove from the system
+                // inform user that staff has already been remove from the system
                 JOptionPane.showMessageDialog(frame,
                     "the part Time staff has already been terinated",
                     "all information about the staff has  been deleted",
