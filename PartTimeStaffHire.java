@@ -47,7 +47,7 @@ public class PartTimeStaffHire extends StaffHire
         this.WorkingHour = WorkingHour; 
     }
     
-    public double WagesPerHour()
+    public double getWagesPerHour()
     {
        return WagesPerHour;
     }
