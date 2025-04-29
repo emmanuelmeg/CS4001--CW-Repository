@@ -380,7 +380,7 @@ public class RecruitmentSystem implements ActionListener
             {
                 // this is to tell the system to remove that index from the database  
                 PartTimeStaffHire PartTimeStaff = (PartTimeStaffHire)staff;
-                database.remove(index);
+                PartTimeStaff.setterminated(boolean Terminated);
                 
 
                 /* this is to inform the user that the termination 
