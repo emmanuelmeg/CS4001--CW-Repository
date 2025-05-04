@@ -3,6 +3,7 @@
  * Write a description of class RecrutitmentSystem here.
  *
  * @author (Emmanuel Megwara)
+ * student numbers : 23035172
  * @version (a version number or a date)
  */
 
@@ -14,10 +15,10 @@ import java.awt.FlowLayout;
 
 public class RecruitmentSystem implements ActionListener
 {
-    
+
     // this for the frame to hold the components of the gui
     private JFrame frame;
-    
+
     // this is the text fields for input
     private JTextField VacancyNumberTextField;
     private JTextField DesignationTextField;
@@ -31,16 +32,16 @@ public class RecruitmentSystem implements ActionListener
     private JTextField WorkingHourTextField;
     private JTextField WagesPerHourTextField;
     private JTextField shiftsTextField;
-    private JTextField TerminatedNumberTextField;
     private JTextField displayNumberTextField;
-    
-    // this a checkbox for both the joined Terminated
+    private JTextField TerminateNumberTextField;
+
+    // this a checkbox for both the joined and Terminated input
     private JCheckBox joined;
     private JCheckBox Terminate;
-    
+
     // handler an object to manage connections and operation with the database
     private Database database;
-    
+
     // this the button for the following actions
     private JButton AddFullTimeStaffButton;
     private JButton AddPartTimestaffButton;
@@ -49,14 +50,13 @@ public class RecruitmentSystem implements ActionListener
     private JButton TerminatePartTimeStaffButton;
     private JButton DisplayNumberButton;
     private JButton ClearButton;
-    
-    
+
     // constructor for the recruitmentSystem
     public RecruitmentSystem()
     {
         makeFrame(); 
         // this build the main gui window and its components
-        
+
         database = new Database();
         //this create an instance in the database class
     }
@@ -66,12 +66,9 @@ public class RecruitmentSystem implements ActionListener
     {
         // this get command from event
         String command = event.getActionCommand();
-        
+
         // this set of condition to control different button commands 
-        if(command.equals("open")) 
-        {
-            open();
-        }
+
         if ( command.equals("Quit")) 
         {
             Quit();
@@ -109,11 +106,6 @@ public class RecruitmentSystem implements ActionListener
 
     }
 
-    public void open()
-    {
-        System.out.println("unable to open a file.");
-    }
-
     public void Quit()
     {
         System.out.println("thanks for use our system ");
@@ -124,7 +116,7 @@ public class RecruitmentSystem implements ActionListener
     public void Clear()
     {
         // this resets all input fields and checkbox
-        
+
         VacancyNumberTextField.setText(" ");
         DesignationTextField.setText("  ");
         jobTypeTextField.setText(" ");
@@ -143,35 +135,45 @@ public class RecruitmentSystem implements ActionListener
 
     }
 
-    
     // method of add a FullTimeStaffhire to the database
     public void AddFullTimeStaffButton()
     {
         try
         {
-            
+
             // this to collect data from thier  textfields and checkbox
-            int VacancyNumber = Integer.parseInt(VacancyNumberTextField.getText());
-            String Designation = DesignationTextField.getText();
-            String jobType = jobTypeTextField.getText();
+            int VacancyNumber = Integer.parseInt(VacancyNumberTextField.getText().trim());
+            String Designation = DesignationTextField.getText().trim();
+            String jobType = jobTypeTextField.getText().trim();
             String StaffName = StaffNameTextField.getText();
-            String joiningDate = joiningDateTextField.getText();
-            String Qualification = QualificationTextField.getText();
-            String appointedBY = appointedBYTextField.getText();
-            double salary = Double.parseDouble(SalaryTextField.getText());
-            int WeeklyFractionalHours = Integer.parseInt(WeeklyFractionalHoursTextField.getText());
+            String joiningDate = joiningDateTextField.getText().trim();
+            String Qualification = QualificationTextField.getText().trim();
+            String appointedBY = appointedBYTextField.getText().trim();
+            double salary = Double.parseDouble(SalaryTextField.getText().trim());
+            int WeeklyFractionalHours = Integer.parseInt(WeeklyFractionalHoursTextField.getText().trim());
             boolean isjoined = joined.isSelected();
+
             
-            
+            // this checks if the following text are empty
+            if (DesignationTextField.getText().isEmpty() &&jobTypeTextField.getText().isEmpty() && StaffNameTextField.getText().isEmpty()&&
+            joiningDateTextField.getText().isEmpty()&&QualificationTextField.getText().isEmpty() &&appointedBYTextField.getText().isEmpty())
+            {
+                JOptionPane.showMessageDialog(frame,
+                    "text field is Empty!",
+                    "partTimeStaffHire",
+                    JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
             // this used the data from the textfields to create a new fulltimestaffhire
-            FullTimeStaffHire FullTimeStaff = new FullTimeStaffHire(
+            FullTimeStaffHire fullTimeStaff = new FullTimeStaffHire(
                     VacancyNumber,jobType,StaffName,Designation, 
                     joiningDate, Qualification, appointedBY,isjoined,
                     salary, WeeklyFractionalHours);
-                    
-             // add a new full time staff to the database
-            database.AddFullTimeStaff(FullTimeStaff);  
-            
+
+            // add a new full time staff to the database
+            database.AddFullTimeStaff(fullTimeStaff);  
+
             // this show a comfirmation message to the user
             JOptionPane.showMessageDialog(frame,
                 "ADD FULLTIMESTaff\n"+" was Successfully addedd",
@@ -179,18 +181,17 @@ public class RecruitmentSystem implements ActionListener
                 JOptionPane.INFORMATION_MESSAGE);
         }catch(NumberFormatException exception)
         {
-            
+
             // this a pop up message to tell the user there is an error in the input fields
             JOptionPane.showMessageDialog(frame,
                 "please check your details for any error \n "+
-                "try to use the the part Time Staff button ",
+                "some field requried numerical values",
                 "fullTimeStaffHire",                            
                 JOptionPane.INFORMATION_MESSAGE);
         }
 
     }
 
-    
     // method of add a PartTimeStaffhire to the database
     public void AddPartTimeStaffButton()
     {
@@ -211,16 +212,25 @@ public class RecruitmentSystem implements ActionListener
             String Shifts = shiftsTextField.getText();
             boolean isTerminate = Terminate.isSelected();
 
+            // this checks if the following text are empty
+            if (DesignationTextField.getText().isEmpty() &&jobTypeTextField.getText().isEmpty() && StaffNameTextField.getText().isEmpty()&&
+            joiningDateTextField.getText().isEmpty()&&QualificationTextField.getText().isEmpty() &&appointedBYTextField.getText().isEmpty())
+            {
+                JOptionPane.showMessageDialog(frame,
+                    "text field is Empty!",
+                    "partTimeStaffHire",
+                    JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
             // this used the data from the textfields to create a new parttimestaffhire
-            PartTimeStaffHire PartTimeStaff = new PartTimeStaffHire(
-                    VacancyNumber,jobType,StaffName, Designation,
-                    Qualification,appointedBY,joiningDate,isjoined,
+            PartTimeStaffHire partTimeStaff = new PartTimeStaffHire(
+                    VacancyNumber,jobType,StaffName,Designation, 
+                    joiningDate, Qualification, appointedBY,isjoined,
                     WorkingHours,WagesPerHour,Shifts,isTerminate);
-            
-                    
+
             //add a new part time staff to the database
-            database.AddPartTimeStaff(PartTimeStaff); 
-             
+            database.AddPartTimeStaff(partTimeStaff); 
 
             // this show a comfirmation message to the user
             JOptionPane.showMessageDialog(frame,
@@ -233,85 +243,97 @@ public class RecruitmentSystem implements ActionListener
             // this a pop up message to tell the user there is an error in the input fields
             JOptionPane.showMessageDialog(frame,
                 "please check your details for any error \n "+
-                "try to use the the full Time Staff button ",
-                "PARTTIMESTAFFHIRE",                            
+                "some field requried numerical values",
+                "PART TIME STAFF HIRE",                            
                 JOptionPane.INFORMATION_MESSAGE);
 
         }
     }
 
-    
     // method to set the salary 
     public void setsalary()
     {
         try{
-            
+
             // get data from the following text field
-            int VacancyNumber = Integer.parseInt(VacancyNumberTextField.getText());
-            double salary = Double.parseDouble(SalaryTextField.getText());
+            int VacancyNumber = Integer.parseInt(VacancyNumberTextField.getText().trim());
+            double salary = Double.parseDouble(SalaryTextField.getText().trim());
             String StaffName = StaffNameTextField.getText();
-            
+
+            // this a boolean value used to check is the staff is in the system
+            boolean found = false;
             // iterate through all staff data from the database class
             for (StaffHire staff: database.getAllStaff()) 
             {
-                
+
                 /* this check if staff is a fulltimestaffhire 
-                   and if both the vacancy number and staff name match the one
-                   from the database*/
+                and if both the vacancy number and staff name match the one
+                from the database*/
                 if (staff instanceof FullTimeStaffHire && 
                 staff.getVacancyNumber() == VacancyNumber && 
                 staff.getStaffName().equals(StaffName))
                 {
-                    
-                    // get the value in salary textfield and update the salary
-                    ((FullTimeStaffHire)staff).setSalary(Double.parseDouble(SalaryTextField.getText()));
 
-                    
+                    // get the value in salary textfield and update the salary
+                    FullTimeStaffHire fullTimeStaff = (FullTimeStaffHire)staff;
+                    fullTimeStaff.setSalary(Double.parseDouble(SalaryTextField.getText()));
+
                     // show success message
                     JOptionPane.showMessageDialog(frame,
                         "full-time staff Salary Updated successfully ",
                         "fullTimeStaffHire",                            
                         JOptionPane.INFORMATION_MESSAGE);
+                     
+                    // this tell the system the staff has been found.
+                    found = true;
 
-                }
-                else
-                {
-                    
-                    // if no match is found, show an error message
-                    JOptionPane.showMessageDialog(frame,
-                        "staff is does not exit" + " Salary Updated was not successfully ",
-                        "vacancyNumber does not exits",                            
-                        JOptionPane.INFORMATION_MESSAGE);
+
+                    // this is to end the loop
+                    break;    
 
                 }
 
+            }
+            if (!found)
+
+            // if no match is found, show an error message
+            {
+                JOptionPane.showMessageDialog(frame,
+                    "staff is does not exit\n" + 
+                    " Salary Updated was not successfully\n "+
+                    "vacancyNumber does not exits or staff name was incorrect ",
+                    "fullTimeStaffHire",                            
+                    JOptionPane.INFORMATION_MESSAGE);
             }
         }catch(NumberFormatException exception)
         {
             // this is a message to handle input format errors
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid amount  for the Salary .",
-                "Invalid Input",
+                "Please enter a valid amount  for the Salary.\n"+
+                "Invalid Input","fullTimeStaffHire",
                 JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    // method to set the setworkingshift
     public void setworkingshift()
     {
         try{
-            
+
             // get data from the following text field
-            int VacancyNumber= Integer.parseInt(VacancyNumberTextField.getText());
+            int VacancyNumber= Integer.parseInt(VacancyNumberTextField.getText().trim());
             String StaffName = StaffNameTextField.getText();
             String Shifts = shiftsTextField.getText();
-            
+
+            // this a boolean value used to check is the staff is in the system
+            boolean found = false;
             // iterate through all staff data from the database class
             for(StaffHire staff: database.getAllStaff())
             {
-                
+
                 /* this check if staff is a PartTimestaffhire 
-                   and if both the vacancy number and staff name match the one
-                   from the database*/
+                and if both the vacancy number and staff name match the one
+                from the database*/
                 if (staff instanceof PartTimeStaffHire &&
                 staff.getVacancyNumber() == VacancyNumber  && 
                 staff.getStaffName().equals(StaffName))
@@ -320,55 +342,62 @@ public class RecruitmentSystem implements ActionListener
                     // to check if the part time staff has joined 
                     if (((PartTimeStaffHire)staff).getjoined())
                     {
-                        
+
                         // get the value in salary textfield and update the shift 
                         ((PartTimeStaffHire)staff).setShifts(shiftsTextField.getText());
-                        
-                        
+
                         // show success message
-                        JOptionPane.showMessageDialog(frame, "Shift updated to: "
-                            + Shifts, "Success",
+                        JOptionPane.showMessageDialog(frame, 
+                            "Shift updated to:"
+                            + Shifts +" \nSuccess","PartTimeStaffHire",
                             JOptionPane.INFORMATION_MESSAGE);
 
-                    }
-                    else
-                    {
-                        
-                        // if no match is found, show an error message
-                        JOptionPane.showMessageDialog(frame,
-                            "staff has not yet joined" + " set of new shift was not successfully ",
-                            "vacancyNumber does not exits",                            
-                            JOptionPane.WARNING_MESSAGE);
+                         // this tell the system the staff has been found.
+                        found = true;
 
+                        // this is to end the loop
+                        break;
+ 
                     }
+
+                    /// this tell  the system that staff has joined.
+                    found = true;
+                }
+                if(!found )
+                {
+
+                    // if no match is found, show an error message
+                    JOptionPane.showMessageDialog(frame,
+                        "staff has not yet joined" + " set of new shift was not successfully ",
+                        "vacancyNumber does not exits",                            
+                        JOptionPane.WARNING_MESSAGE);
 
                 }
             }
         }catch(NumberFormatException exception)
         {
-            
+
             // this is a message to handle input format errors
-            
-            
+
             JOptionPane.showMessageDialog(frame,
-                "Please enter a  string value for the shift .",
+                "Please enter a  data type for the VacancyNumber .",
                 "Invalid Input",
                 JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    
     // a method to Terminate A part time staff
     public void TerminatePartTimeStaff()
     {
-        
+
         //the index based on what the user put in this text field
-        int index = getDisplayNumber();
+        int index = getTerminateNumber();
+
         try
         {
-            
+
             // get data from this  text field
-            int VacancyNumber = Integer.parseInt(VacancyNumberTextField.getText());
+            int VacancyNumber = Integer.parseInt(VacancyNumberTextField.getText().trim());
 
             // to get staff object of a particular index
             StaffHire staff = database.getAtIndex(index);
@@ -379,35 +408,38 @@ public class RecruitmentSystem implements ActionListener
             staff.getVacancyNumber() == VacancyNumber)
             {
                 // this is to tell the system to remove that index from the database  
-                PartTimeStaffHire PartTimeStaff = (PartTimeStaffHire)staff;
-                PartTimeStaff.setterminated(boolean Terminated);
-                
+                PartTimeStaffHire partTimeStaff = (PartTimeStaffHire)staff;
+                partTimeStaff.setTerminated(Terminate.isSelected());
+                database.remove(index);
 
                 /* this is to inform the user that the termination 
                  * of the part was successful */
                 JOptionPane.showMessageDialog(frame,
-                    "the part time staff has been Terminated",
-                    "all iformation about the staff has been removed ",
+                    "the part time staff has been Terminated\n"+
+                    "all information about the staff has been removed ",
+                    "TerminatePartTimeStaff",
                     JOptionPane.INFORMATION_MESSAGE);
             }
             else
             { 
-                
-                // inform user that staff has already been remove from the system
+
+                // inform user that staff has already remove from the system
                 JOptionPane.showMessageDialog(frame,
-                    "the part Time staff has already been terinated",
+                    "the part Time staff has already been terinated\n"+
                     "all information about the staff has  been deleted",
+                    "TerminatePartTimeStaff",
                     JOptionPane.ERROR_MESSAGE);
 
             }
         }catch(NumberFormatException exception)
         {
-            
+
             // this is to handel any invalid input from vacancy number text field
             JOptionPane.showMessageDialog(frame,
-                    "the part Time staff may have not yet joined yet",
-                    "please check that you enter the rigth VacancyNumber",
-                    JOptionPane.INFORMATION_MESSAGE);
+                "the part Time staff may have not yet joined yet\n" +
+                "please check that you enter the rigth VacancyNumber",
+                "TerminatePartTimeStaff",
+                JOptionPane.INFORMATION_MESSAGE);
 
         }
     }
@@ -415,35 +447,34 @@ public class RecruitmentSystem implements ActionListener
     // the method for display staff information
     public void DisplayNumber()
     {
-        
+
         // //the index based on what the user put in this text field
         int index = getDisplayNumber();
         if(index != -1)
         {
-            
+
             // to get staff object of a particular index
             StaffHire staff = database.getAtIndex(index);
 
             // to check if staff belong to the fullTimeStaffHire 
             if(staff instanceof FullTimeStaffHire)   {
-            
+
                 // to display the full time staff informations
-                FullTimeStaffHire FullTimeStaff = (FullTimeStaffHire) staff;
-                FullTimeStaff.display();
+                FullTimeStaffHire fullTimeStaff = (FullTimeStaffHire) staff;
+                fullTimeStaff.display();
 
             }
             // to check if staff belong to the parttimestaff
             else if(staff instanceof PartTimeStaffHire )
             {
                 // to display the part time staff informations
-                PartTimeStaffHire PartTimeStaff = (PartTimeStaffHire) staff;
-                PartTimeStaff.display();
+                PartTimeStaffHire partTimeStaff = (PartTimeStaffHire) staff;
+                partTimeStaff.display();
 
             }
         }
     }
 
-    
     // A method get DispalyNumber 
     public int getDisplayNumber()
     {
@@ -460,15 +491,14 @@ public class RecruitmentSystem implements ActionListener
                     "Display number out of range. Please enter a number between 0 and " + (database.getSize() -1) + ".",
                     "Invalid Display Number",
                     JOptionPane.ERROR_MESSAGE);
-                
+
                 // return to invaild if out of range    
                 displayNumber = -1;
             }
 
-            
         } catch (NumberFormatException exception)
         {
-            
+
             // this is to handel input that is not a number
             JOptionPane.showMessageDialog(frame,
                 "Please enter a valid integer for the display number.",
@@ -479,14 +509,47 @@ public class RecruitmentSystem implements ActionListener
         return displayNumber;
     }
 
-    
+    // A method get TerminateNumber
+    public int getTerminateNumber()
+    {
+        int TerminateNumber =  -1;
+
+        try {
+            // get data from this  text field
+            TerminateNumber = Integer.parseInt(TerminateNumberTextField.getText());
+
+            // this is to check if index is within the range of the database list
+            if (TerminateNumber < 0 || TerminateNumber >=database.getSize()) {
+                JOptionPane.showMessageDialog(frame,
+                    "Display number out of range. Please enter a number between 0 and " + (database.getSize() -1) + ".",
+                    "Invalid Display Number",
+                    JOptionPane.ERROR_MESSAGE);
+
+                // return to invaild if out of range    
+                TerminateNumber = -1;
+            }
+
+        } catch (NumberFormatException exception)
+        {
+
+            // this is to handel input that is not a number
+            JOptionPane.showMessageDialog(frame,
+                "Please enter a valid integer for the TerminateNumber.",
+                "Invalid Input",
+                JOptionPane.ERROR_MESSAGE);
+        }
+
+        return TerminateNumber;
+    }
+
     // the method of build of the frame and all it contain
     private void makeFrame()
     {
-        
+
         //this the frame title
         frame = new JFrame("RecrutitmentSystem");
         
+
         // this a content pane of the frame
         Container contentPane = frame.getContentPane();
         makeMenuBar(frame);
@@ -535,10 +598,15 @@ public class RecruitmentSystem implements ActionListener
         JLabel displayNumberText= new JLabel("displayNumber:");
         displayNumberTextField = new JTextField(15);
 
+        JLabel TerminateNumberText = new JLabel("TerminateNumber");
+        TerminateNumberTextField = new JTextField(15);
+
         // the layout of the frame 
-        contentPane.setLayout(new GridLayout(0,4));
+        contentPane.setLayout(new GridLayout(0,4,10,5));
 
         // this where each label and text field were place on the frame
+        
+    
         contentPane.add(VacancyNumberText);
         contentPane.add(VacancyNumberTextField);
 
@@ -578,18 +646,25 @@ public class RecruitmentSystem implements ActionListener
         contentPane.add(displayNumberText);
         contentPane.add(displayNumberTextField);
 
+        contentPane.add(TerminateNumberText);
+        contentPane.add(TerminateNumberTextField);
+
         // the creation of  a new jpanel with a layout and was added to the main frame
         JPanel flowPanel = new JPanel();
         flowPanel.setLayout(new FlowLayout());
         frame.add(flowPanel);
-        
+
         // this a checkbox for joined and Terminate
         joined = new JCheckBox("joined");
         flowPanel.add(joined);
 
         Terminate = new JCheckBox("terminated");
         frame.add(Terminate);
-
+        
+        // create some space in the GUI
+        frame.add(new JLabel(" "));
+        frame.add(new JLabel(" "));
+      
         /* the creations of the button ,add the button to the frame 
          * and  action listener */  
 
@@ -621,7 +696,6 @@ public class RecruitmentSystem implements ActionListener
         frame.add(ClearButton);
         ClearButton.addActionListener(this);
 
-              
         frame.pack();
         frame.setVisible(true); // make the frame visible
     }
@@ -635,10 +709,6 @@ public class RecruitmentSystem implements ActionListener
         // create the File menu
         JMenu fileMenu = new JMenu("File");
         menubar.add(fileMenu);
-
-        JMenuItem openItem = new JMenuItem("Open");
-        openItem.addActionListener(this);
-        fileMenu.add(openItem);
 
         JMenuItem quitItem = new JMenuItem("Quit");
         quitItem.addActionListener(this);
