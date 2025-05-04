@@ -85,7 +85,7 @@ public class PartTimeStaffHire extends StaffHire
     {
         
         // this checks what the value in Terminated  
-        if (Terminated)
+        if (getTerminated())
         {
             System.out.println("the staff has been terminated");
         }
@@ -118,7 +118,7 @@ public class PartTimeStaffHire extends StaffHire
         System.out.println("your shifts for the day is "+" "+ Shifts);
         
         /* it checks whether is staff has been Terminated */
-        if (Terminated == true)
+        if (Terminated)
         {
             System.out.println("terminated: yes");
         }
